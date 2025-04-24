@@ -1,0 +1,2 @@
+C:/Users/Victus/Desktop/an_app_v1/android/app/.cxx/Debug/5fu4l2p1/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Victus/Desktop/an_app_v1/android/app/.cxx/Debug/5fu4l2p1/x86_64/CMakeFiles/rebuild_cache.dir

@@ -16,7 +16,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final isFirstLaunch = true;
+  const isFirstLaunch = true;
   //final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
   try {
     await Firebase.initializeApp();

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseService {
@@ -27,37 +26,56 @@ class FirebaseService {
     return null;
   }
 
-
   // mesaj gönder
-  Future<void> mesajGonder(String odaID, String mesaj) async {
-    String username = 'Bilinmeyen';
+  Future<void> mesajGonder(String odaID, Map<String, dynamic> messageData) async {
+    try {
+      String username = 'Bilinmeyen';
 
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        username = doc['username'] ?? 'Bilinmeyen'; // 'username' varsa al, yoksa 'Bilinmeyen' kullan
+      // Kullanıcı bilgilerini al
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      if (userDoc.exists) {
+        username = userDoc['username'] ?? 'Bilinmeyen';
       }
-    }).catchError((e) {
-      print("Hata: $e");
-    });
 
-    await _firestore.collection('odalar').doc(odaID).collection('mesajlar').add({
-      'mesaj': mesaj,
-      'gonderen': username,  // Burada 'gonderen' username ile güncellenmiş oldu
-      'gonderenUid': FirebaseAuth.instance.currentUser!.uid,
-      'timestamp': Timestamp.now(),
-    });
+      // Mesaj verilerini hazırla
+      final message = {
+        'mesaj': messageData['mesaj'],
+        'gonderen': username,
+        'gonderenUid': FirebaseAuth.instance.currentUser!.uid,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      // Eğer alıntı varsa ekle
+      if (messageData.containsKey('replyTo') && messageData['replyTo'] != null) {
+        message['replyTo'] = {
+          'messageText': messageData['replyTo']['messageText'],
+          'senderUsername': messageData['replyTo']['senderUsername'],
+        };
+      }
+
+      // Mesajı gönder
+      await _firestore
+          .collection('odalar')
+          .doc(odaID)
+          .collection('mesajlar')
+          .add(message);
+    } catch (e) {
+      print("Mesaj gönderme hatası: $e");
+      rethrow;
+    }
   }
 
-
   // mesajları dinle
-Stream<QuerySnapshot> mesajlariDinle(String odaID)
-{
-  return _firestore.collection('odalar').doc(odaID).collection('mesajlar')
-      .orderBy('timestamp', descending: true)
-      .snapshots();
-}
+  Stream<QuerySnapshot> mesajlariDinle(String odaID) {
+    return _firestore
+        .collection('odalar')
+        .doc(odaID)
+        .collection('mesajlar')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
 }

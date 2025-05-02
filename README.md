@@ -1,16 +1,22 @@
-# an_app_v1
+Description
+The word "An" in Turkish corresponds to the English word "moment." The goal of this application is to allow my girlfriend and me to watch YouTube videos simultaneously in sync. I am still actively working on the app, and I plan to add new features. Once these additions are made, the app will be fully ready.
 
-An App
+Features
 
-## Getting Started
+    Sync video playback across multiple devices
 
-This project is a starting point for a Flutter application.
+    Simple and intuitive user interface
 
-A few resources to get you started if this is your first Flutter project:
+    Ongoing updates with new features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Technologies Used
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    Flutter
+
+    Firebase
+
+Contributing
+Feel free to contribute by opening issues, suggesting features, or submitting pull requests. Contributions are always welcome!
+
+License
+This project is licensed under the Creative Commons License.
